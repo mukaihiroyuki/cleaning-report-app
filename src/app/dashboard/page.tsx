@@ -62,9 +62,14 @@ export default async function DashboardPage({
         countQuery = countQuery.contains('store_names', [storeFilter])
     }
     if (monthFilter) {
+        const [year, month] = monthFilter.split('-').map(Number)
+        // Use UTC dates to avoid timezone issues
+        const startDate = new Date(Date.UTC(year, month - 1, 1)).toISOString()
+        const endDate = new Date(Date.UTC(year, month, 1)).toISOString()
+
         countQuery = countQuery
-            .gte('report_date', `${monthFilter}-01`)
-            .lt('report_date', `${monthFilter}-32`)
+            .gte('report_date', startDate)
+            .lt('report_date', endDate)
     }
 
     const { count: totalCount } = await countQuery
@@ -82,9 +87,14 @@ export default async function DashboardPage({
         dataQuery = dataQuery.contains('store_names', [storeFilter])
     }
     if (monthFilter) {
+        const [year, month] = monthFilter.split('-').map(Number)
+        // Use UTC dates to avoid timezone issues
+        const startDate = new Date(Date.UTC(year, month - 1, 1)).toISOString()
+        const endDate = new Date(Date.UTC(year, month, 1)).toISOString()
+
         dataQuery = dataQuery
-            .gte('report_date', `${monthFilter}-01`)
-            .lt('report_date', `${monthFilter}-32`)
+            .gte('report_date', startDate)
+            .lt('report_date', endDate)
     }
 
     const { data: reports, error } = await dataQuery.range(offset, offset + PAGE_SIZE - 1)
