@@ -22,6 +22,17 @@ const getStatusIcon = (status: string) => {
     return <AlertCircle className="w-3 h-3 mr-1" />
 }
 
+// Helper to format date (YYYY-MM-DD)
+const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return '日付不明'
+    // Check if it's a full timestamp like 2025-10-31T00:00:00+00:00
+    // If so, just take the first part
+    if (dateString.includes('T')) {
+        return dateString.split('T')[0]
+    }
+    return dateString
+}
+
 export function ReportsList({ reports }: { reports: CleaningReport[] }) {
     if (!reports || reports.length === 0) {
         return (
@@ -72,7 +83,7 @@ export function ReportsList({ reports }: { reports: CleaningReport[] }) {
                                     </h3>
                                     <div className="flex items-center text-slate-500 dark:text-slate-400 text-sm mt-1">
                                         <CalendarDays className="w-4 h-4 mr-1.5 opacity-70" />
-                                        {report.report_date || report.cleaning_date || '日付不明'}
+                                        {formatDate(report.report_date || report.cleaning_date)}
                                     </div>
                                 </div>
 
@@ -131,7 +142,7 @@ export function ReportsList({ reports }: { reports: CleaningReport[] }) {
                                         <Badge variant="outline" className={getStatusColor(report.status || '未完了')}>
                                             {report.status || '未完了'}
                                         </Badge>
-                                        <span className="text-xs text-slate-500">{report.cleaning_date}</span>
+                                        <span className="text-xs text-slate-500">{formatDate(report.report_date || report.cleaning_date)}</span>
                                     </div>
                                     <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white">
                                         {report.store_names || report.store_name || '店舗名不明'}
