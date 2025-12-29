@@ -1,22 +1,41 @@
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { ReportsList } from '@/components/dashboard/reports-list'
+import { Pagination } from '@/components/dashboard/pagination'
 import { CleaningReport } from '@/types/report'
 
 // Revalidate data every 60 seconds
 export const revalidate = 60
 
-export default async function DashboardPage() {
+const PAGE_SIZE = 20
+
+export default async function DashboardPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string }>
+}) {
+    const params = await searchParams
+    const currentPage = Math.max(1, parseInt(params.page || '1', 10))
+    const offset = (currentPage - 1) * PAGE_SIZE
+
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Fetch reports - only "清掃完了" status to show photos
+    // Get total count first
+    const { count: totalCount } = await supabase
+        .from('cleaning_reports')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', '清掃完了')
+
+    const totalPages = Math.ceil((totalCount || 0) / PAGE_SIZE)
+
+    // Fetch reports for current page
     const { data: reports, error } = await supabase
         .from('cleaning_reports')
         .select('*')
         .eq('status', '清掃完了')
         .order('report_date', { ascending: false })
-        .limit(20)
+        .range(offset, offset + PAGE_SIZE - 1)
 
     // Handle errors or empty data gracefully
     const cleanReports = (reports || []) as CleaningReport[]
@@ -60,6 +79,14 @@ export default async function DashboardPage() {
 
                     {/* Reports Grid */}
                     <ReportsList reports={cleanReports} />
+
+                    {/* Pagination */}
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        totalCount={totalCount || 0}
+                        pageSize={PAGE_SIZE}
+                    />
                 </div>
             </main>
         </div>
