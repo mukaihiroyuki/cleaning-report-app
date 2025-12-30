@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>櫻井清掃管理システム 使い方ガイド</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f5f5f5;
+            padding: 12px;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        h3 {
+            color: #333;
+            margin: 24px 0 12px 0;
+            font-size: 1.1rem;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h4 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .step-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            position: relative;
+            padding: 16px 16px 16px 60px;
+            margin: 12px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .step-list li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .warning-box strong {
+            color: #856404;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .success-box strong {
+            color: #155724;
+        }
+
+        .info-box {
+            background: #e7f1ff;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .info-box strong {
+            color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .faq-item {
+            margin: 16px 0;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .faq-item strong {
+            color: #667eea;
+        }
+
+        .flow-diagram {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            margin: 8px;
+        }
+
+        .flow-arrow {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: #667eea;
+            margin: 0 10px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .nav-tab {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .flow-step {
+                display: block;
+                margin: 10px 0;
+            }
+
+            .flow-arrow {
+                display: block;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧹 櫻井清掃管理システム</h1>
+            <p>使い方ガイド</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">概要</button>
+            <button class="nav-tab" onclick="showSection('notion')">Notion操作</button>
+            <button class="nav-tab" onclick="showSection('archive')">週次アーカイブ</button>
+            <button class="nav-tab" onclick="showSection('dashboard')">ダッシュボード</button>
+            <button class="nav-tab" onclick="showSection('discord')">Discord</button>
+            <button class="nav-tab" onclick="showSection('faq')">FAQ</button>
+        </div>
+
+        <div class="content">
+            <!-- 概要 -->
+            <div id="overview" class="section active">
+                <h2>このシステムでできること</h2>
+                <div class="feature-cards">
+                    <div class="feature-card">
+                        <div class="icon">📸</div>
+                        <h4>清掃報告の保存</h4>
+                        <p>写真付きレポートをクラウドに保存</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🔍</div>
+                        <h4>過去レポート検索</h4>
+                        <p>店舗名・月でフィルタリング</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">📱</div>
+                        <h4>Webダッシュボード</h4>
+                        <p>PCでもスマホでも閲覧可能</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">🔔</div>
+                        <h4>Discord通知</h4>
+                        <p>完了時に自動で通知</p>
+                    </div>
+                </div>
+
+                <h3>運用フロー全体像</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step">清掃依頼</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">清掃実施</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">Notionで完了登録</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">週1回アーカイブ</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">Supabase保存</div>
+                    <span class="flow-arrow">→</span>
+                    <div class="flow-step">Discord通知</div>
+                </div>
+
+                <div class="info-box">
+                    <strong>📱 スマホでも使えます！</strong><br>
+                    URLにアクセスするだけ。ログインはPCと同じ方法です。
+                </div>
+            </div>
+
+            <!-- Notion操作 -->
+            <div id="notion" class="section">
+                <h2>1. Notionで清掃完了を登録する</h2>
+                <p><strong>目的：</strong>清掃が完了したら、Notionで「清掃完了」ステータスに変更します。</p>
+
+                <h3>手順</h3>
+                <ol class="step-list">
+                    <li>Notionの清掃管理データベースを開く</li>
+                    <li>完了した清掃の行を見つける</li>
+                    <li>ステータス列をクリック</li>
+                    <li>「清掃完了」を選択</li>
+                    <li>写真がアップロードされているか確認</li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ 重要！</strong><br>
+                    写真は必ずNotionにアップロードしてください。アーカイブ時にSupabaseに自動保存されます。
+                </div>
+
+                <h3>確認項目</h3>
+                <table>
+                    <tr>
+                        <th>項目</th>
+                        <th>説明</th>
+                    </tr>
+                    <tr>
+                        <td>店舗名</td>
+                        <td>正確な店舗名が入力されているか</td>
+                    </tr>
+                    <tr>
+                        <td>清掃日時</td>
+                        <td>実施日時が正しいか</td>
+                    </tr>
+                    <tr>
+                        <td>写真</td>
+                        <td>清掃の証拠写真がアップロードされているか</td>
+                    </tr>
+                    <tr>
+                        <td>コメント</td>
+                        <td>特記事項があれば記入</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 週次アーカイブ -->
+            <div id="archive" class="section">
+                <h2>2. 週1回アーカイブを実行する</h2>
+                <p><strong>目的：</strong>「清掃完了」のデータを自動的にSupabaseに保存し、Notionを軽く保ちます。</p>
+
+                <h3>実行方法</h3>
+                <ol class="step-list">
+                    <li>アーカイブ用Pythonスクリプトを起動</li>
+                    <li>「実行」ボタンをクリック</li>
+                    <li>処理完了を待つ（通常1-2分）</li>
+                    <li>Discord通知で完了を確認</li>
+                </ol>
+
+                <div class="success-box">
+                    <strong>✅ 自動保存される情報</strong><br>
+                    ・店舗名<br>
+                    ・清掃日時<br>
+                    ・写真（Supabase Storageに永久保存）<br>
+                    ・コメント<br>
+                    ・担当者
+                </div>
+
+                <h3>実行タイミング</h3>
+                <p>毎週<strong>月曜日の朝</strong>に実行することを推奨します。</p>
+
+                <div class="info-box">
+                    <strong>💡 ヒント</strong><br>
+                    アーカイブ後、Notion上のデータは自動的に「アーカイブ済み」ステータスに変わります。
+                </div>
+            </div>
+
+            <!-- ダッシュボード -->
+            <div id="dashboard" class="section">
+                <h2>3. Webダッシュボードで確認する</h2>
+                <p><strong>URL:</strong> <a href="https://cleaning-report-app.vercel.app"
+                        target="_blank">https://cleaning-report-app.vercel.app</a></p>
+
+                <h3>ログイン方法</h3>
+                <ol class="step-list">
+                    <li>上記URLにアクセス</li>
+                    <li>メールアドレスとパスワードを入力</li>
+                    <li>「ログイン」をクリック</li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ ログイン情報</strong><br>
+                    ログイン情報は管理者から別途共有されます。
+                </div>
+
+                <h3>主な機能</h3>
+                <table>
+                    <tr>
+                        <th>機能</th>
+                        <th>説明</th>
+                    </tr>
+                    <tr>
+                        <td>レポート一覧</td>
+                        <td>全ての清掃レポートを時系列で表示</td>
+                    </tr>
+                    <tr>
+                        <td>店舗名フィルター</td>
+                        <td>特定の店舗のレポートだけを表示</td>
+                    </tr>
+                    <tr>
+                        <td>月別フィルター</td>
+                        <td>特定の月のレポートだけを表示</td>
+                    </tr>
+                    <tr>
+                        <td>詳細表示</td>
+                        <td>写真や詳細情報を確認</td>
+                    </tr>
+                </table>
+
+                <h3>フィルターの使い方</h3>
+                <ol class="step-list">
+                    <li>画面上部の「フィルター」ボタンをクリック</li>
+                    <li>店舗名または月を選択</li>
+                    <li>絞り込まれたレポートが表示される</li>
+                    <li>「クリア」で全件表示に戻る</li>
+                </ol>
+            </div>
+
+            <!-- Discord -->
+            <div id="discord" class="section">
+                <h2>4. Discord通知</h2>
+                <p><strong>目的：</strong>アーカイブ完了時に自動でDiscordに通知が届きます。</p>
+
+                <h3>通知される内容</h3>
+                <ul style="margin: 16px 0; padding-left: 24px;">
+                    <li>アーカイブ実行日時</li>
+                    <li>保存された件数</li>
+                    <li>店舗名リスト</li>
+                    <li>ダッシュボードへのリンク</li>
+                </ul>
+
+                <div class="success-box">
+                    <strong>✅ 自動通知の利点</strong><br>
+                    ・アーカイブの成功・失敗をすぐに把握できる<br>
+                    ・チーム全体で進捗を共有できる<br>
+                    ・問題があれば即座に対応可能
+                </div>
+
+                <h3>通知設定</h3>
+                <p>Discordチャンネルへの招待リンクは管理者から共有されます。</p>
+
+                <div class="info-box">
+                    <strong>💡 推奨設定</strong><br>
+                    スマホアプリでDiscord通知をオンにしておくと、外出先でもすぐに確認できます。
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div id="faq" class="section">
+                <h2>よくある質問</h2>
+
+                <div class="faq-item">
+                    <strong>Q: Notionが重くなってきた</strong>
+                    <p>週次アーカイブを実行すれば、「清掃完了」データがSupabaseに移行され、Notionが軽くなります。</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>Q: 過去の写真を見たい</strong>
+                    <p>Webダッシュボードにアクセスし、店舗名や月でフィルターをかけて検索してください。</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>Q: アーカイブを実行し忘れた</strong>
+                    <p>いつでも実行可能です。「清掃完了」ステータスのデータが自動的にアーカイブされます。</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>Q: ログイン情報を忘れた</strong>
+                    <p>管理者（向井）に連絡して確認してください。</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>Q: スマホから見られますか？</strong>
+                    <p>はい、Webダッシュボードはスマホ対応です。同じURLにアクセスしてログインしてください。</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>Q: 写真が表示されない</strong>
+                    <p>Notionに写真がアップロードされていないか、アーカイブがまだ実行されていない可能性があります。</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>Q: Discord通知が来ない</strong>
+                    <p>Discordチャンネルに参加しているか確認してください。または通知設定を確認してください。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // すべてのセクションを非表示
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // すべてのタブを非アクティブ
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            // 選択したセクションを表示
+            document.getElementById(sectionId).classList.add('active');
+            // 対応するタブをアクティブに
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
